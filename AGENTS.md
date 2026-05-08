@@ -126,3 +126,50 @@ cd packages/database && bunx vitest run --silent='passed-only' '[file]'
 ### Code Review
 
 Before reviewing a PR / diff / branch change, read the **review-checklist** skill (`.agents/skills/review-checklist/SKILL.md`) — it lists the recurring mistakes specific to this codebase.
+
+## Cursor Cloud specific instructions
+
+### Prerequisites
+
+- **bun** must be on `$PATH` (installed to `~/.bun/bin` via `curl -fsSL https://bun.sh/install | bash`). The update script handles this automatically.
+- **pnpm 10.33.0** is specified via `packageManager` in `package.json` and comes with Node 22 via corepack or nvm.
+- **Node.js 22** (`lts/krypton`) — set in `.nvmrc`.
+- `.npmrc` sets `lockfile=false`, so `pnpm install` will not generate a lockfile.
+
+### Running the SPA dev server (frontend-only)
+
+```bash
+bun run dev:spa # Vite on :9876
+```
+
+This starts the Vite SPA dev server. It proxies API calls to `localhost:3010` (Next.js), but the SPA renders fully without a running backend — you'll see the UI with placeholder/loading states.
+
+The terminal prints a **Debug Proxy URL** that loads your local SPA inside the production app.lobehub.com environment (useful for testing with real backend data).
+
+### Full-stack dev (requires Docker services)
+
+Full-stack dev (`bun run dev`) needs PostgreSQL, Redis, and RustFS (S3-compatible). Start them via:
+
+```bash
+bun run dev:docker # docker compose up for pg, redis, rustfs, searxng
+pnpm db:migrate    # run database migrations
+bun run dev        # starts Next.js :3010 + Vite SPA concurrently
+```
+
+Docker services require Docker to be installed in the VM. This is optional for frontend-only work.
+
+### Key commands
+
+| Task              | Command                                                                   |
+| ----------------- | ------------------------------------------------------------------------- |
+| Type-check        | `bun run type-check` (uses `tsgo`)                                        |
+| Lint (TS)         | `bun run lint:ts`                                                         |
+| Lint (style)      | `bun run lint:style`                                                      |
+| Run a single test | `bunx vitest run --silent='passed-only' '<file>'`                         |
+| DB package test   | `cd packages/database && bunx vitest run --silent='passed-only' '<file>'` |
+
+### Gotchas
+
+- **Never run `bun run test`** — it runs the full test suite and takes \~10 minutes. Always target specific files.
+- The `pnpm.onlyBuiltDependencies` field in `package.json` restricts native builds to `@lobehub/editor` and `ffmpeg-static` only — avoids interactive `pnpm approve-builds` prompts.
+- The `.npmrc` has `lockfile=false`, so there is no `pnpm-lock.yaml` in the repo root. This is intentional.
