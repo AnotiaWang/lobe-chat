@@ -649,6 +649,7 @@ const siliconcloudChatModels: AIChatModelCard[] = [
         { name: 'textOutput', rate: 28, strategy: 'fixed', unit: 'millionTokens' },
       ],
     },
+    releasedAt: '2026-06-17',
     settings: {
       extendParams: ['enableReasoning', 'reasoningBudgetToken'],
     },
