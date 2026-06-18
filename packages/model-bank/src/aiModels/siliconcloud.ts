@@ -632,6 +632,33 @@ const siliconcloudChatModels: AIChatModelCard[] = [
       functionCall: true,
       reasoning: true,
     },
+    contextWindowTokens: 1_048_576,
+    description:
+      'GLM-5.2 is Z.ai’s latest flagship model for long-horizon task scenarios, with significant improvements over GLM-5.1 in long-horizon task capabilities. This 753B model supports a stable 1M-token context, offers stronger coding capabilities, and supports multiple thinking effort levels for flexible balancing between performance and latency. GLM-5.2 introduces the IndexShare architecture optimization, reducing per-token FLOPs by 2.9x at 1M context length, and improves the MTP layer to support speculative decoding, increasing acceptance length by up to 20%.',
+    displayName: 'GLM-5.2',
+    enabled: true,
+    family: 'glm',
+    generation: 'glm-5.2',
+    id: 'zai-org/GLM-5.2',
+    organization: 'Z.AI',
+    pricing: {
+      currency: 'CNY',
+      units: [
+        { name: 'textInput_cacheRead', rate: 2, strategy: 'fixed', unit: 'millionTokens' },
+        { name: 'textInput', rate: 8, strategy: 'fixed', unit: 'millionTokens' },
+        { name: 'textOutput', rate: 28, strategy: 'fixed', unit: 'millionTokens' },
+      ],
+    },
+    settings: {
+      extendParams: ['enableReasoning', 'reasoningBudgetToken'],
+    },
+    type: 'chat',
+  },
+  {
+    abilities: {
+      functionCall: true,
+      reasoning: true,
+    },
     contextWindowTokens: 198_000,
     description:
       'GLM-5.1 is a next-generation flagship model designed for agent engineering, using a Mixture of Experts (MoE) architecture with 754B parameters. It significantly enhances programming capabilities, achieving leading results on SWE-Bench Pro, and substantially outperforms its predecessor on benchmarks like NL2Repo and Terminal-Bench 2.0. Designed for long-duration agent tasks, it handles ambiguous questions with better judgment, decomposes complex tasks, executes experiments, analyzes results, and continuously optimizes through hundreds of iterations and thousands of tool calls.',
